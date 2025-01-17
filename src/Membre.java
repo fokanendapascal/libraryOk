@@ -1,6 +1,8 @@
+import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
-public class Membre extends MembreDAO {
+public class Membre {
     private int id;
     private String nom;
     private String prenom;
@@ -8,12 +10,11 @@ public class Membre extends MembreDAO {
     private LocalDate adhesionDate;
 
     public Membre(int id, String nom, String prenom, String email, LocalDate adhesionDate){
-        super();
         this.id = id;
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
-        this.adhesionDate = adhesionDate;
+        this.adhesionDate = LocalDate.now();
     }
 
     public int getId() {
@@ -56,8 +57,30 @@ public class Membre extends MembreDAO {
         this.adhesionDate = adhesionDate;
     }
 
-    public void afficherDetails(){
+    // Méthodes pour ajouter, modifier et supprimer un membre
+    public static void addMembre(ArrayList<Membre> membres, Membre membre) {
+        membres.add(membre);
+    }
+
+    public static void updateMembre(ArrayList<Membre> membres, int id, String nom, String prenom, String email, LocalDate adhesionDate) {
+        for (Membre membre : membres) {
+            if (membre.getId() == id) {
+                membre.setNom(nom);
+                membre.setPrenom(prenom);
+                membre.setEmail(email);
+                membre.setAdhesionDate(adhesionDate);
+            }
+        }
+    }
+
+    public static void deleteMembre(ArrayList<Membre> membres, int id) {
+        membres.removeIf(membre -> membre.getId() == id);
+    }
+
+
+    public Membre afficherDetails(Membre membre){
         System.out.printf("Les détails des membres sont: %d,%s,%s,%s, %s\n",getId(), getNom(), getPrenom(), getEmail(), getAdhesionDate());
+        return membre;
     }
 
 }

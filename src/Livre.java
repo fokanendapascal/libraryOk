@@ -1,24 +1,27 @@
-public class Livre extends LivreDAO {
+import java.util.*;
+
+public class Livre {
     private int id;
     private String titre;
     private String auteur;
     private String categorie;
     private int nombreExemplaires;
 
+
     public Livre(int id, String titre, String auteur, String categorie, int nombreExemplaires) {
-        super();
-        this.id = id;
-        this.titre = titre;
-        this.auteur = auteur;
-        this.categorie = categorie;
-        this.nombreExemplaires = nombreExemplaires;
+       this.id = 0;
+        this.titre = "";
+        this.auteur = "";
+        this.categorie = "";
+        this.nombreExemplaires = 0;
     }
 
-    public int getId() {
+
+    public int getId(){
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(){
         this.id = id;
     }
 
@@ -27,7 +30,7 @@ public class Livre extends LivreDAO {
     }
 
     public void setTitre(String titre) {
-        this.titre = titre;
+        this.titre = this.titre;
     }
 
     public String getAuteur() {
@@ -35,7 +38,7 @@ public class Livre extends LivreDAO {
     }
 
     public void setAuteur(String auteur) {
-        this.auteur = auteur;
+        this.auteur = this.auteur;
     }
 
     public String getCategorie() {
@@ -43,7 +46,7 @@ public class Livre extends LivreDAO {
     }
 
     public void setCategorie(String categorie) {
-        this.categorie = categorie;
+        this.categorie = this.categorie;
     }
 
     public int getNombreExemplaires() {
@@ -51,10 +54,39 @@ public class Livre extends LivreDAO {
     }
 
     public void setNombreExemplaires(int nombreExemplaires) {
-        this.nombreExemplaires = nombreExemplaires;
+        this.nombreExemplaires = this.nombreExemplaires;
     }
 
-    public void afficherDetails() {
-        System.out.printf("Les détails des livres sont: %d,%s,%s,%s,%d\n",getId(), getTitre(), getAuteur(), getCategorie(), getNombreExemplaires());
+    // Méthodes pour ajouter, modifier et supprimer un livre
+    public static void addLivre(ArrayList<Livre> livres, Livre livre) {
+        livres.add(livre);
     }
+
+    public static void updateLivre(ArrayList<Livre> livres, int id,String titre, String auteur, String categorie, int nombreExemplaires) {
+        for (Livre livre : livres) {
+            if (livre.getId() == id) {
+                livre.setTitre(titre);
+                livre.setAuteur(auteur);
+                livre.setCategorie(categorie);
+                livre.setNombreExemplaires(nombreExemplaires);
+            }
+        }
+    }
+/*
+    public static void deleteLivre(ArrayList<Livre> livres, int id) {
+        livres.removeIf(livre -> livre.getId() == id);
+    }
+
+*/
+
+
+
+
+/*
+   public Livre afficherDetails(Livre livre) {
+        System.out.printf("Les détails des livres sont: %d,%s,%s,%s,%d\n", getId(), getTitre(), getAuteur(), getCategorie(), getNombreExemplaires());
+       return livre;
+   }
+*/
+
 }

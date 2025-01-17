@@ -1,36 +1,30 @@
 import java.sql.*;
 
 public class DBConnection {
-    static final String DATABASE_URL = "jdbc:postgresql://localhost:5432/librarydb";
+    private static Connection connection;
 
-    public static void main(String[] args) {
-
-        Connection connection ;
-        Statement statement ;
-        ResultSet resultSet ;
-
-        try{
-            connection = DriverManager.getConnection(DATABASE_URL, "fokanenpascal", "Pfn1306_l");
-            statement = connection.createStatement();
-
-            System.out.println("Insertion....");
-            String sql = "INSERT INTO livres" + "VALUES( 1, 'Le Larousse médicale', 'Collectif', 'Dictionnaire', 50 )";
-            statement.executeUpdate(sql);
-
-            sql = "INSERT INTO livres" + "VALUES( 2, 'La cryptographie déchiffrée', 'Aumasson, Jean-Philippe', 'Argumentatif', 20)";
-            statement.executeUpdate(sql);
-
-            sql = "INSERT INTO livres" + "VALUES(3, 'L'intelligence artificielle en 5 minutes par jour', 'Ascoli, Stephane', 'Langages et Programmation', 20)";
-            statement.executeUpdate(sql);
-
-            System.out.println("Données insérées dans la table....");
-
-            resultSet = statement.executeQuery("SELECT * FROM livres ");
-            System.out.println(resultSet);
-
-        }catch (Exception e){
-            System.out.println(e);
+    // Méthode pour initialiser la connexion
+    public void initialize(String database_url, String username, String password) throws SQLException {
+        if (connection == null) {
+            connection = DriverManager.getConnection(database_url, username, password);
+            System.out.println("connexion réussie!");
         }
-
     }
+
+    // Méthode pour obtenir la connexion existante
+    public static Connection getConnection() throws SQLException {
+        if (connection == null) {
+            throw new SQLException("No database connection.");
+        }
+        return connection;
+    }
+
+    // Méthode pour fermer la connexion
+    public static void closeConnection() throws SQLException {
+        if (connection != null) {
+            connection.close();
+            System.out.println("connection close !");
+        }
+    }
+
 }
