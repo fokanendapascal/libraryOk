@@ -1,22 +1,22 @@
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
-public class Emprunt extends EmpruntDAO {
+public class Emprunt {
     private int idEmprunt;
-    private int membreId;
-    private int livreId;
+    private Membre membre;
+    private Livre livre;
     private LocalDate dateEmprunt;
     private LocalDate dateRetourPrevue;
     private LocalDate dateRetourEffective;
 
-    public Emprunt(int idEmprunt, int membreId, int livreId, LocalDate dateEmprunt, LocalDate dateRetourPrevue, LocalDate dateRetourEffective){
-        super();
-        this.idEmprunt = idEmprunt;
-        this.membreId = membreId;
-        this.livreId = livreId;
-        this.dateEmprunt = dateEmprunt;
-        this.dateRetourPrevue = dateRetourPrevue;
-        this.dateRetourEffective = dateRetourEffective;
+    public Emprunt(int idEmprunt, Membre membre, Livre livre, LocalDate dateEmprunt, LocalDate dateRetourPrevue, LocalDate dateRetourEffective){
+        this.idEmprunt = 0;
+        this.membre = null;
+        this.livre = null;
+        this.dateEmprunt = null;
+        this.dateRetourPrevue = null;
+        this.dateRetourEffective = null;
     }
 
     public int getIdEmprunt() {
@@ -27,20 +27,21 @@ public class Emprunt extends EmpruntDAO {
         this.idEmprunt = idEmprunt;
     }
 
-    public int getMembreId() {
-        return membreId;
+    public Membre getMembre() {
+
+        return membre;
     }
 
-    public void setMembreId(int membreId) {
-        this.membreId = membreId;
+    public void setMembre(Membre membre) {
+        this.membre = membre;
     }
 
-    public int getLivreId() {
-        return livreId;
+    public Livre getLivre() {
+        return livre;
     }
 
-    public void setLivreId(int livreId) {
-        this.livreId = livreId;
+    public void setLivreId(Livre livre) {
+        this.livre = livre;
     }
 
     public LocalDate getDateEmprunt() {
@@ -67,23 +68,37 @@ public class Emprunt extends EmpruntDAO {
         this.dateRetourEffective = dateRetourEffective;
     }
 
-    public void calculerPenalite(LocalDate x, LocalDate y) {
-        int nbreJours = (int) x.until(y, ChronoUnit.DAYS);
-        int penalite = 0;
-        if (nbreJours <= 0){
-            System.out.println("Pas de pénalité " );
-        }else{
-            penalite = 100 * nbreJours;
-            System.out.println("La pénalité est de: " +penalite);
-        }
+    // Méthode pour enregistrer un emprunt
+    public void enregistrerEmprunt(Membre membre, Livre livre, LocalDate dateEmprunt, LocalDate dateRetourPrevue) {
+        this.membre = membre;
+        this.livre = livre;
+        this.dateEmprunt = dateEmprunt;
+        this.dateRetourPrevue = dateRetourPrevue;
+        this.dateRetourEffective = null; // Initialement, il n'y a pas de retour
     }
 
-    public void afficherDetails() {
-        if (dateRetourPrevue.isBefore(dateRetourEffective)) {
-            System.out.printf("Les emprunts en retard : %d, %d, %d, %s, %s, %s,\n", getIdEmprunt(), getMembreId(), getLivreId(), getDateEmprunt(), getDateRetourPrevue(), getDateRetourEffective());
-        } else {
-            System.out.printf("Les emprunts en cours : %d, %d, %d, %s, %s, %s,\n", getIdEmprunt(), getMembreId(), getLivreId(), getDateEmprunt(), getDateRetourPrevue(), getDateRetourEffective());
-        }
+    // Méthode pour gérer le retour d'un livre et enregistrer la date de retour
+    public void enregistrerRetour(LocalDate dateRetourEffective) {
+        this.dateRetourEffective = dateRetourEffective;
     }
+
+    // Méthode pour calculer la pénalité en cas de retard
+    public long calculerPenalite() {
+        if (dateRetourEffective != null && dateRetourEffective.isAfter(dateRetourPrevue)) {
+            long joursDeRetard = ChronoUnit.DAYS.between(dateRetourPrevue, dateRetourEffective);
+    // return : 100 F CFA par jour de retard
+            return joursDeRetard * 100;
+        }
+        return 0; // Pas de pénalité si le retour est dans les délais
+    }
+
+    // Méthode pour afficher les détails de l'emprunt
+    public void afficherDetails() {
+        System.out.println("Emprunt ID: " + idEmprunt + ", Livre: " + livre.getTitre() + ", Membre: " + membre.getNom() + " " + membre.getPrenom() +
+                        ", Date d'emprunt: " + dateEmprunt + ", Date retour prévue: " + dateRetourPrevue + ", Date retour effective: " + dateRetourEffective);
+    }
+
+
+
 
 }
