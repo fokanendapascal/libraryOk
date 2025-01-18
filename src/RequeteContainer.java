@@ -1,29 +1,20 @@
-import java.sql.SQLException;
 
 public class RequeteContainer {
 
     //afficher les penalites
     public static String afficherPenalite(){
-        return "SELECT membres.nom AS NomEmprunteur, membres.prenom AS PrenomEmprunteur, livres.titre AS LivreEmprunte, penalites.montant AS MontantPenalite FROM penalites JOIN emprunts ON penalites.empruntId = emprunts.empruntId JOIN membres ON emprunts.membreId = membres.id JOIN livres ON emprunts.livreId = livres.id";
+        return "SELECT membres.nom AS NomEmprunteur, membres.prenom AS PrenomEmprunteur, livres.titre AS LivreEmprunte, penalites.montant AS MontantPenalite FROM penalites JOIN emprunts ON penalites.empruntId = emprunts.idEmprunt JOIN membres ON emprunts.membreId = membres.id JOIN livres ON emprunts.livreId = livres.id";
     }
 
     //afficher les emprunts encours
     public static String afficherEmpruntEncours(){
-        return "SELECT " +
-                "e.empruntId AS id, " +
-                "m.nom AS NomEmprunteur, " +
-                "m.prenom AS PrenomEmprunteur, " +
-                "l.titre AS LivreEmprunte, " +
-                "e.dateEmprunt AS DateEmprunt, " +
-                "e.dateRetourPrevue AS DateRetourPrevue " +
-                "FROM Emprunts e JOIN Membres m ON e.membreId = m.id" +
-                "JOIN Livres l ON e.livreId = l.id WHERE e.dateRetourEffective IS NULL";
+        return "SELECT e.idEmprunt AS id, m.nom AS NomEmprunteur, m.prenom AS PrenomEmprunteur, l.titre AS LivreEmprunte, e.dateEmprunt AS DateEmprunt, e.dateRetourPrevue AS DateRetourPrevue FROM Emprunts e JOIN Membres m ON e.membreId = m.id JOIN Livres l ON e.livreId = l.id WHERE e.dateRetourEffective IS NULL";
     }
 
     //afficher les emprunts
     public static String afficherEmpruntsRetournes() {
         return "SELECT " +
-                " e.empruntId AS id, " +
+                " e.idEmprunt AS id, " +
                 " m.nom AS NomEmprunteur, " +
                 " m.prenom AS PrenomEmprunteur, " +
                 " l.titre AS LivreEmprunte, " +
@@ -41,7 +32,7 @@ public class RequeteContainer {
     }
 
     //afficher tous les elements d'une table
-    public static String afficherAllElem(String elem) throws SQLException {
+    public static String afficherAllElem(String elem){
     // Exécuter la requête SELECT pour afficher la liste des livres
         return "SELECT * FROM " + elem;
     }
@@ -74,7 +65,7 @@ public class RequeteContainer {
     }
 
     //ajout d'un membre
-    public static <D> String insertMembre(String nom, String prenom, String email) {
+    public static String insertMembre(String nom, String prenom, String email) {
         return "INSERT INTO membres (nom, prenom, email, adhesiondate) VALUES ('" + nom + "', '" + prenom + "', '" + email + "', CURRENT_DATE)";
     }
 
@@ -104,8 +95,6 @@ public class RequeteContainer {
 
     //calcule automatique des pénalités
     public static String calculPenalites() {
-        return "SELECT ROW_NUMBER() OVER (ORDER BY membreId, livreId) AS empruntId, (date(dateRetourEffective) - date(dateRetourPrevue)) * 100 AS montant FROM Emprunts WHERE dateRetourEffective IS NOT NULL AND dateRetourEffective > dateRetourPrevue;";
+        return "SELECT ROW_NUMBER() OVER(ORDER BY idEmprunt, membreId, livreId) AS empruntId, (date(dateRetourEffective) - date(dateRetourPrevue)) * 100 AS montant FROM Emprunts WHERE dateRetourEffective IS NOT NULL AND dateRetourEffective > dateRetourPrevue;";
     }
-
-
 }

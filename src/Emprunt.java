@@ -1,4 +1,3 @@
-import java.sql.Date;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
@@ -10,7 +9,8 @@ public class Emprunt {
     private LocalDate dateRetourPrevue;
     private LocalDate dateRetourEffective;
 
-    public Emprunt(int idEmprunt, Membre membre, Livre livre, LocalDate dateEmprunt, LocalDate dateRetourPrevue, LocalDate dateRetourEffective){
+    //constructeur
+    public Emprunt(){
         this.idEmprunt = 0;
         this.membre = null;
         this.livre = null;
@@ -28,7 +28,6 @@ public class Emprunt {
     }
 
     public Membre getMembre() {
-
         return membre;
     }
 
@@ -83,10 +82,10 @@ public class Emprunt {
     }
 
     // Méthode pour calculer la pénalité en cas de retard
-    public long calculerPenalite() {
+    public long calculerPenalites() {
         if (dateRetourEffective != null && dateRetourEffective.isAfter(dateRetourPrevue)) {
             long joursDeRetard = ChronoUnit.DAYS.between(dateRetourPrevue, dateRetourEffective);
-    // return : 100 F CFA par jour de retard
+            // return : 100 F CFA par jour de retard
             return joursDeRetard * 100;
         }
         return 0; // Pas de pénalité si le retour est dans les délais
@@ -97,8 +96,4 @@ public class Emprunt {
         System.out.println("Emprunt ID: " + idEmprunt + ", Livre: " + livre.getTitre() + ", Membre: " + membre.getNom() + " " + membre.getPrenom() +
                         ", Date d'emprunt: " + dateEmprunt + ", Date retour prévue: " + dateRetourPrevue + ", Date retour effective: " + dateRetourEffective);
     }
-
-
-
-
 }

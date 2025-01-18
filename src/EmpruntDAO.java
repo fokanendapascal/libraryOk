@@ -1,7 +1,7 @@
-import java.sql.*;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Scanner;
 
 public class EmpruntDAO {
@@ -49,6 +49,7 @@ public class EmpruntDAO {
                 System.out.println("1. List Of Returns");
                 System.out.println("2. list Of Current loan");
                 System.out.println("Your Choice : ");
+
                 int choice1 = scanner.nextInt();
                 switch (choice1) {
                     case 0:
@@ -97,8 +98,10 @@ public class EmpruntDAO {
                 System.out.println("\n list of id of loan return");
                 System.out.println("Print : ");
                 int choice2 = scanner.nextInt();
+
                 System.out.println("confirm yes / no");
                 String choice3 = scanner.next();
+
                 if (choice3.equalsIgnoreCase("yes")) {
                     String updateQuery = RequeteContainer.retournerEmprunt(choice2);
                     int rowsUpdated1 = statement.executeUpdate(updateQuery);
@@ -116,10 +119,12 @@ public class EmpruntDAO {
 
             case 4:
                 System.out.println("\n calculate automatically penalty \n");
-                RequeteContainer.calculPenalites();
+                String penalites = RequeteContainer.calculPenalites();
+
                 System.out.println("liste of penalties : ");
                 displayPenalite();
                 break;
+
             case 5:
                 FichierMenus.end();
                 System.exit(0);
@@ -138,20 +143,21 @@ public class EmpruntDAO {
         ResultSet resultSet = statement.executeQuery(display);
 
         // Afficher l'en-tête du tableau
-        String format = "| %-18s | %-18s | %-40s | %-18s |\n";
-        System.out.format("+--------------------+--------------------+------------------------------------------ +--------------------+\n");
-        System.out.format("| NomEmprunteur | PrenomEmprunteur | LivreEmprunte | MontantPenalite |\n");
-        System.out.format("+--------------------+--------------------+------------------------------------------ +--------------------+\n");
+        String format = "| %-10s | %-18s | %-18s | %-40s | %-18s |\n";
+        System.out.format("+--------------+--------------------+--------------------+------------------------------------------ +--------------------+\n");
+        System.out.format("| idEmprunteur | NomEmprunteur | PrenomEmprunteur | LivreEmprunte | MontantPenalite |\n");
+        System.out.format("+--------------+--------------------+--------------------+------------------------------------------ +--------------------+\n");
 
         // Parcourir et afficher les résultats
         while (resultSet.next()) {
+            int idEmprunt = resultSet.getInt("idEmprunteur");
             String nom = resultSet.getString("NomEmprunteur");
             String prenom = resultSet.getString("PrenomEmprunteur");
             String titre = resultSet.getString("LivreEmprunte");
             String montant = resultSet.getString("MontantPenalite");
 
             // Formater chaque ligne
-            System.out.format(format, nom, prenom, titre, montant);
+            System.out.format(format, idEmprunt, nom, prenom, titre, montant);
         }
 
         // Afficher la ligne de fin du tableau
@@ -226,5 +232,6 @@ public class EmpruntDAO {
         // Fermer les ressources
         resultSet.close();
     }
+
 
 }

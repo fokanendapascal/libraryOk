@@ -83,9 +83,7 @@ public class FichierMenus {
             default:
                 System.out.println("Invalid Choice... return to main menu");
                 menuChoice();
-
         }
-
     }
 
     private static void optionDeSortie(Scanner scanner, int choice1) throws SQLException {
@@ -123,10 +121,9 @@ public class FichierMenus {
             } else {
                 System.out.println("Choice invalid enter choice between '1' and '2'.");
             }
-
         }
-
     }
+
     static void end () {
         System.out.println("Thanks You ");
     }
@@ -139,6 +136,7 @@ public class FichierMenus {
         System.out.println("3. Search an " + elem);
         System.out.print("Your Choice: ");
     }
+
     public static void generiqueMenuBody (String elem){
         System.out.println("this is the list of " + elem + " in our library \n");
         System.out.println("1. return to main menu");
